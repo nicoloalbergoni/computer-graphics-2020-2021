@@ -17,12 +17,12 @@ function move() {
 
 	var R1 = A6;				   
 	// Half the size of the object along a line that bisects the positive x and y axes on the xy-plane. 
-	align_x_axis = utils.invertMatrix(utils.MakeRotateZMatrix(45));
-	scale = utils.MakeScaleMatrix(0.5);
-	algin_x_back = utils.MakeRotateZMatrix(45);
+	rotate_x = utils.invertMatrix(utils.MakeRotateZMatrix(45));
+	scale = utils.MakeScaleNuMatrix(0.5,1,1);
+	rotate_x_back = utils.MakeRotateZMatrix(45);
 
-	B1 = utils.multiplyMatrices(algin_x_back, scale);
-	B2 = utils.multiplyMatrices(B1, align_x_axis);
+	B1 = utils.multiplyMatrices(rotate_x_back, scale);
+	B2 = utils.multiplyMatrices(B1, rotate_x);
 
 	var S1 = B2;
 			   
@@ -42,10 +42,14 @@ function move() {
 	var S2 =  C4;
 			   
 	// Apply the inverse of the following sequence of transforms: rotation of 30 degree around the Y axis then Translation of (0, 0, 5), and finally a uniform scaling of a factor of 3.
-	var I1 =  [1.0,		0.0,		0.0,		0.0,
-			   0.0,		1.0,		0.0,		0.0,
-			   0.0,		0.0,		1.0,		0.0,
-			   0.0,		0.0,		0.0,		1.0];
+	scale = utils.invertMatrix(utils.MakeScaleMatrix(3));
+	translation = utils.invertMatrix(utils.MakeTranslateMatrix(0,0,5));
+	rotate_y = utils.invertMatrix(utils.MakeRotateYMatrix(30));
+
+	D1 = utils.multiplyMatrices(rotate_y, translation);
+	D2 = utils.multiplyMatrices(D1, scale);
+
+	var I1 =  D2;
 
 	return [R1, S1, S2, I1];
 }
