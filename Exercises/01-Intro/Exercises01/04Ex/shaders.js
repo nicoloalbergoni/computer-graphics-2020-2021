@@ -11,5 +11,6 @@ uniform float radians_over_time;
 out vec4 outColor;
 
 void main() {
-  outColor = vec4(0.0, 0.0, 1.0, 1.0);
+  float value = abs(sin(radians_over_time));
+  outColor = vec4(value, 0.0, 0.0, 1.0);
 }`;

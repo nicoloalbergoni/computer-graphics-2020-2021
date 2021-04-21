@@ -24,5 +24,8 @@ uniform vec3 lightColor; //directional light color
 out vec4 outColor;
 
 void main() {
-  outColor = vec4(0.0,0.0,1.0, 1.0);
+  vec3 normals = normalize(fs_norm);
+  vec3 n_lightDirection =  normalize(lightDirection);
+  vec3 lambert = lightColor * mDiffColor * clamp(dot(n_lightDirection, normals), 0.0, 1.0);
+  outColor = vec4(lambert, 1.0);
 }`;
