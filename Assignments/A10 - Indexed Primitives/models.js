@@ -5,33 +5,32 @@ function buildGeometry() {
 	// Draws function y = sin(x) * cos(z) with -3 <= x <= 3 and -3 <= z <= 3.
 	///// Creates vertices
 	var vert2 = [];
-	for(i = 0; i <= 2; i++) {
-		for(j = 0; j <= 2; j++) {
-			x = i - 1;
-			z = j - 1;
-			vert2[i*3+j] = [x, 0, z];
+	for(i = 0; i < 7; i++) {
+		for(j = 0; j < 7; j++) {
+			x = i - 3;
+			z = j - 3;			
+			y = Math.sin(x) * Math.cos(z);
+			vert2[(7*i) + j] = [x, y, z];
 		}
 	}
 	////// Creates indices
 	var ind2 = [];
-	for(i = 0; i < 2; i++) {
-		for(j = 0; j < 2; j++) {
-			ind2[6*(i*2+j)  ] = 3*j+i;
-			ind2[6*(i*2+j)+1] = 3*j+i+1;
-			ind2[6*(i*2+j)+2] = 3*(j+1)+i+1;
-			ind2[6*(i*2+j)+3] = 3*j+i;
-			ind2[6*(i*2+j)+4] = 3*(j+1)+i+1;
-			ind2[6*(i*2+j)+5] = 3*(j+1)+i;
-		}
-	}
+	
+	for (let i = 0; i < 6; i++) {
+		for (let j = 0; j < 6; j++) {
+			ind2.push((7 * i) + j);
+			ind2.push((7 * i) + j + 1);
+			ind2.push((7 * i) + j + 7);
 
+			ind2.push((7 * i) + j + 1);
+			ind2.push((7 * i) + j + 8);
+			ind2.push((7 * i) + j + 7);
+			console.log(ind2);
+		}		
+	}
 
 	var color2 = [0.0, 0.0, 1.0];
 	addMesh(vert2, ind2, color2);
-
-
-
-
 
 
 	// Draws a Half Sphere
