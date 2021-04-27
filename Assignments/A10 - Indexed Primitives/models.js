@@ -35,7 +35,7 @@ function buildGeometry() {
 	// Draws a Half Sphere
 	///// Creates vertices
 	var vert3 = [];
-	var radius = 2;
+	var radius = 2;	
 	for(let i = 0; i < 9; i++) {
 		for(let j = 0; j < 36; j++) {
 			theta = i * 10;
@@ -46,65 +46,48 @@ function buildGeometry() {
 			vert3.push([x,y,z]);	
 		}
 	}
-//	vert3.push([0,0,0]);
-	////// Creates indices
-	var ind3 = [];
 	
-	// for(i = 0; i < 36; i++) {
-	// 	for(j = 1; j < 8; j++) {
-	// 		ind3.push(i + (j - 1) * 36 + 1);
-	// 		ind3.push(i + j * 36 + 1);
-	// 		ind3.push((i + 1) % 36 + (j-1) * 36 + 1);
+	y_center = radius * Math.cos(utils.degToRad(80));
+	vert3.push([0,y_center,0]);
+	console.log(vert3);
 
-	// 		ind3.push((i + 1) % 36 + (j-1) * 36 + 1);
-	// 		ind3.push(i + j * 36 + 1);
-	// 		ind3.push((i + 1) % 36 + j * 36 + 1);
-	// 	}
-	// }
+
+	////// Creates indices
+	var ind3 = [];	
+
 
 		for(let i = 0; i < 8; i++) {
-			for(let j = 0; j < 35; j++) {
+			for(let j = 0; j < 36; j++) {
 				ind3.push((36 * i) + j);
 				ind3.push((36 * i) + j + 36);
-				ind3.push(((36 * i) + j + 36 + 1));
+				ind3.push(((36 * i) + ((j + 1) % 36) + 36 ));
 
-				ind3.push(((36 * i) + j + 36 + 1));
-				ind3.push((36 * i) + j + 1);
+				ind3.push(((36 * i) + ((j + 1) % 36) + 36));
+				ind3.push((36 * i) + ((j + 1) % 36));
 				ind3.push((36 * i) + j);
 
-			}	
-
-				// ind3.push((36 * i) + 35);
-				// ind3.push((36 * i) + 35 + 36);
-				// ind3.push(((36 * i) + 0 + 36 + 1));
-
-				// ind3.push(((36 * i) + 0 + 36 + 1));
-				// ind3.push((36 * i) + 0 + 1);
-				// ind3.push((36 * i) + 35);
-
+			}		
 				
-				ind3.push((36 * i) + 35);
-				ind3.push((36 * i) + 35 + 36);
-				ind3.push(((36 * i) + 0 + 36 ));
+			// Manual Indexes
 
-				ind3.push(((36 * i) + 0 + 36));
-				ind3.push((36 * i) + 0);
-				ind3.push((36 * i) + 35);
+			// ind3.push((36 * i) + 35);
+			// ind3.push((36 * i) + 35 + 36);
+			// ind3.push(((36 * i) + 0 + 36 ));
+
+			// ind3.push(((36 * i) + 0 + 36));
+			// ind3.push((36 * i) + 0);
+			// ind3.push((36 * i) + 35);
 	}
 
-	
-	// for(let i = 1; i < 8; i++) {
-	// 	for(let j = 0; j < 36; j++) {
-	// 		ind3.push((36 * i) + j);
-	// 		ind3.push((36 * i) + j + 36);
-	// 		ind3.push(((36 * i) + j + 36 + 1));
+	// Bottom disk
 
-	// 		ind3.push(((36 * i) + j + 36 + 1));
-	// 		ind3.push((36 * i) + j + 1);
-	// 		ind3.push((36 * i) + j);
+	for (let j = 0; j < 36; j++) {
+		ind3.push(324);
+		ind3.push(((36 * 7) + ((j + 1) % 36) + 36 ));
+		ind3.push((36 * 7) + j + 36);		
+	}
 
-	// 	}	
-	// }
+
 
 	var color3 = [0.0, 1.0, 0.0];
 	addMesh(vert3, ind3, color3);
