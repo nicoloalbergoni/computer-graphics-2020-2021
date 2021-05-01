@@ -34,6 +34,7 @@ function shaders() {
 //
 // vec4 ambientColor;
 
+// TODO: Finished
 // Single directional light, constant ambient
 var S1 = `
 	OlightDir = Dir;
@@ -42,39 +43,81 @@ var S1 = `
 	ambientColor = ambientLightColor;
 `;
 
+// TODO: Finished
 // Single point light without decay
 var S2 = `
 	OlightDir = normalize(Pos - fs_pos);
 	OlightColor = lightColor;
 `;
 
+// TODO: Finished
 // Single spot light (without decay), constant ambient
 var S3 = `
-	OlightDir = normalize(Pos - fs_pos);
-	float final_color_clamp = clamp((dot(OlightDir, Dir) - ConeOut) / (ConeIn - ConeOut), 0.0, 1.0);
+	vec3 light_dir_n = normalize(Pos - fs_pos);
+	float final_ConeOut = cos(radians(ConeOut/2.0));
+	float final_ConeIn = cos(radians((ConeOut * ConeIn)/2.0));
+	float final_color_clamp = clamp((dot(light_dir_n, Dir) - final_ConeOut) / (final_ConeIn - final_ConeOut), 0.0, 1.0);
 	vec4 final_color = lightColor * final_color_clamp;
+
+	OlightDir = light_dir_n;
 	OlightColor = final_color;
 	ambientColor = ambientLightColor;
 `;
 
+// TODO: Finished
 // Single point light with decay
 var S4 = `
-	
+	vec3 light_dir_n = normalize(Pos - fs_pos);
+	float decay_factor = pow((Target / length(Pos - fs_pos)), Decay);
+	vec4 final_color = lightColor * decay_factor;
+
+	OlightColor = final_color;
+	OlightDir = light_dir_n;
 `;
 
+// TODO: Finished
 // Single spot light (with decay)
 var S5 = `
-	
+	vec3 light_dir_n = normalize(Pos - fs_pos);
+	float final_ConeOut = cos(radians(ConeOut/2.0));
+	float final_ConeIn = cos(radians((ConeOut * ConeIn)/2.0));
+	float final_color_clamp = clamp((dot(light_dir_n, Dir) - final_ConeOut) / (final_ConeIn - final_ConeOut), 0.0, 1.0);
+  float decay_factor = pow((Target / length(Pos - fs_pos)), Decay);
+
+  vec4 final_color = lightColor * decay_factor * final_color_clamp;
+
+	OlightColor = final_color;
+	OlightDir = light_dir_n;
+
 `;
 
+//TODO: See if decay is missing and if we need to add constant term ambient light
 // Single point light, hemispheric ambient 
 var S6 = `
-	
+  vec3 light_dir_n = normalize(Pos - fs_pos);
+  float cos_alpha = dot(normalVec, ADir);
+  vec4 hem_ambient = (((cos_alpha + 1.0) / 2.0) * ambientLightColor) + (((1.0 - cos_alpha) / 2.0) * ambientLightLowColor);
+
+
+  OlightColor = lightColor;
+	OlightDir = light_dir_n;
+  ambientColor = hem_ambient;
 `;
 
+//TODO: See if decay is missing
 // Single spot light, spherical harmonics ambient
 var S7 = `
+  vec3 light_dir_n = normalize(Pos - fs_pos);
+  float final_ConeOut = cos(radians(ConeOut/2.0));
+  float final_ConeIn = cos(radians((ConeOut * ConeIn)/2.0));
+  float final_color_clamp = clamp((dot(light_dir_n, Dir) - final_ConeOut) / (final_ConeIn - final_ConeOut), 0.0, 1.0);
+  vec4 final_color = lightColor * final_color_clamp;
 
+  vec4 spherical_ambient = SHconstColor + (normalVec.x * SHDeltaLxColor) + (normalVec.y * SHDeltaLyColor) + (normalVec.z * SHDeltaLzColor);
+
+  OlightDir = light_dir_n;
+  OlightColor = final_color;
+  ambientColor = spherical_ambient;
 `;
 	return [S1, S2, S3, S4, S5, S6, S7];
 }
