@@ -50,7 +50,7 @@ var S2 = `
 	vec4 diffuse = diffColor * (LA_diffuse + LB_diffuse + LC_diffuse);
 
 	vec3 half_LA = normalize(lightDirA + eyedirVec);
-	vec3 half_LB = normalize(lightDirB + eyedirVec);
+	vec3 half_LB = normalize(lightDirB + eyedirVec);	
 	vec3 half_LC = normalize(lightDirC + eyedirVec);
 
 	vec4 LA_specular = pow(clamp(dot(normalVec, half_LA), 0.0, 1.0), SpecShine) * lightColorA;
