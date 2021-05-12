@@ -25,13 +25,20 @@ function buildGeometry() {
 		// Upper Face
 		[-1.0, 1.0, 1.0, 0.0, 1.0, 0.0], [1.0, 1.0, 1.0, 0.0, 1.0, 0.0], [1.0, 1.0, -1.0, 0.0, 1.0, 0.0], [-1.0, 1.0, -1.0, 0.0, 1.0, 0.0] 
 	];
-	// var ind2 = [0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23];
-	//TODO:  Ruotare in senso orarioback left, bottom
-	var ind2 = [0, 1, 2, 0, 2, 3, 4, 6, 5, 4, 7, 6, 8, 10, 9, 8, 11, 10, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23];
+
+	var ind2 = [0, 1, 2, 0, 2, 3,
+							4, 5, 6, 4, 6, 7,
+							9, 8, 11, 9, 11, 10, // Different order for back-face culling (Back Face)
+							13, 12, 15, 13, 15, 14, // Different order for back-face culling (Right Face)
+							17, 16, 19, 17, 19, 18, // Different order for back-face culling (Bottom Face)
+						  20, 21, 22, 20, 22, 23
+						];
 	var color2 = [0.0, 1.0, 1.0];
 	addMesh(vert2, ind2, color2);
 	
 	// Draws function y = sin(x) * cos(z) with -3 <= x <= 3 and -3 <= z <= 3 -- To do for the assignment.
+
+	
 	var vert3 = [[-1.0,-1.0, 0.0, 0.0, 0.0,1.0], [1.0,-1.0,0.0, 0.0, 0.0,1.0], [1.0,1.0,0.0, 0.0, 0.0,1.0], [-1.0,1.0,0.0, 0.0, 0.0,1.0]];
 	var ind3 = [0, 1, 2,  0, 2, 3];
 	var color3 = [0.0, 1.0, 1.0];
