@@ -80,8 +80,68 @@ function buildGeometry() {
 	addMesh(vert3, ind3, color3);
 	
 	// Draws a Cylinder --- To do for the assignment
-	var vert4 = [[-1.0,-1.0,0.0, 0.0, 0.0,1.0], [1.0,-1.0,0.0, 0.0, 0.0,1.0], [1.0,1.0,0.0, 0.0, 0.0,1.0], [-1.0,1.0,0.0, 0.0, 0.0,1.0]];
-	var ind4 = [0, 1, 2,  0, 2, 3];
+		var vert4 = [];
+		var ind4 = [];
+
+		let height = 5;
+		let radius = 2;
+
+		for (let i = 0; i < 4; i++) {
+			let h = - (i * height) + (height / 2.0); 	// y is set from -heigth/2 to height/2
+			for (let j = 0; j < 36; j++) {
+				let theta = j * 10;
+				let x = radius * Math.sin(utils.degToRad(theta));
+				let z = radius * Math.cos(utils.degToRad(theta));
+				
+				if (i < 2) { // Create vertices for flat surface
+					let y = h;				
+					let normal = normalizeV3([Math.sin(utils.degToRad(theta)), 0, Math.cos(utils.degToRad(theta))]);
+					vert4.push([x,y,z, ...normal]);
+				} else if (i == 2) { // Create vertices for upper disk
+					let y = height / 2.0;				
+					let normal = [0, 1, 0];
+					vert4.push([x,y,z, ...normal]);
+				} else { // Create vertices for bottom disk
+					let y = - (height / 2.0);				
+					let normal = [0, -1, 0];
+					vert4.push([x,y,z, ...normal]);
+				}
+			}			
+		}
+
+		// Create vertex for the center of the upper disk
+		let up_center = [0, (height / 2.0), 0, 0, 1, 0];
+		let up_center_pos = vert4.push(up_center) - 1;
+
+		// Create vertex for the center of the bottom disk
+		let bottom_center = [0, -(height / 2.0), 0, 0, -1, 0];
+		let bottom_center_pos = vert4.push(bottom_center) - 1;
+
+		// Assign indexes for the surface of the cylinder
+		for (let j = 0; j < 36; j++) {
+			ind4.push(j);
+			ind4.push(j + 36);
+			ind4.push(((j + 1) % 36) + 36);
+
+			ind4.push(((j + 1) % 36) + 36);
+			ind4.push((j + 1) % 36);
+			ind4.push(j);
+		}			
+
+		// Assign indexes for the upper disk
+		for (let i = 0; i < 36; i++) {
+			ind4.push(up_center_pos);
+			ind4.push((36 * 2) + i);
+			ind4.push((36 * 2) + ((i + 1) % 36));			
+		}
+		
+		// Assign indexes for the bottom disk (different order for back-face culling)
+		for (let i = 0; i < 36; i++) {
+			ind4.push(bottom_center_pos);
+			ind4.push((36 * 3) + ((i + 1) % 36));					
+			ind4.push((36 * 3) + i);
+		}
+	
 	var color4 = [1.0, 1.0, 0.0];
 	addMesh(vert4, ind4, color4);
 
