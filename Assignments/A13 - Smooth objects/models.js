@@ -1,3 +1,12 @@
+function crossV3(a, b) {
+	return [ a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0] ];
+}
+
+function normalizeV3(v) {
+	let norm = Math.sqrt(Math.pow(v[0], 2) + Math.pow(v[1], 2) + Math.pow(v[2], 2));
+	return [v[0] / norm, v[1] / norm, v[2] / norm];
+}
+
 function buildGeometry() {
 	// Draws a pyramid --- Already done, just for inspiration
 	var vert1 = [[0.0,1.0,0.0, 0.0, 0.4472,-0.8944],[ 1.0,-1.0,-1.0, 0.0, 0.4472,-0.8944],[-1.0,-1.0,-1.0, 0.0, 0.4472,-0.8944],
@@ -38,9 +47,35 @@ function buildGeometry() {
 	
 	// Draws function y = sin(x) * cos(z) with -3 <= x <= 3 and -3 <= z <= 3 -- To do for the assignment.
 
+	var vert3 = [];
+	for(let i = 0; i < 7; i++) {
+		for(let j = 0; j < 7; j++) {
+			let x = i - 3;
+			let z = j - 3;			
+			let y = Math.sin(x) * Math.cos(z);
+			let dx = [1, Math.cos(x) * Math.cos(z), 0];
+			let dz = [0, Math.sin(x) * (-Math.sin(z)), 1];
+			let cross_dx_dz = crossV3(dx, dz);
+			let normal = normalizeV3(cross_dx_dz); 
+				
+			vert3[(7*i) + j] = [x, y, z, -normal[0], -normal[1], -normal[2]];
+		}
+	}
+	////// Creates indices
+	var ind3 = [];
 	
-	var vert3 = [[-1.0,-1.0, 0.0, 0.0, 0.0,1.0], [1.0,-1.0,0.0, 0.0, 0.0,1.0], [1.0,1.0,0.0, 0.0, 0.0,1.0], [-1.0,1.0,0.0, 0.0, 0.0,1.0]];
-	var ind3 = [0, 1, 2,  0, 2, 3];
+	for (let i = 0; i < 6; i++) {
+		for (let j = 0; j < 6; j++) {
+			ind3.push((7 * i) + j);
+			ind3.push((7 * i) + j + 1);
+			ind3.push((7 * i) + j + 7);
+
+			ind3.push((7 * i) + j + 1);
+			ind3.push((7 * i) + j + 8);
+			ind3.push((7 * i) + j + 7);
+		}		
+	}
+
 	var color3 = [0.0, 1.0, 1.0];
 	addMesh(vert3, ind3, color3);
 	
