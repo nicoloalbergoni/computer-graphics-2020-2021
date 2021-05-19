@@ -4,12 +4,17 @@ in vec3 inPosition;
 in vec3 inNormal;
 
 out vec3 fsPosition;
+out vec3 fsNormal;
 
 //Modify the shader as needed :)
 
-uniform mat4 matrix; 
+uniform mat4 matrix;
+uniform mat4 nMatrix;
+uniform mat4 pMatrix; 
 
 void main() {
+  fsNormal = mat3(nMatrix) * inNormal;
+  fsPosition = (pMatrix * vec4(inPosition, 1.0)).xyz;
   gl_Position = matrix * vec4(inPosition, 1.0);
 }`;
 
@@ -93,6 +98,9 @@ function main() {
   var lightColorHandle = gl.getUniformLocation(program, 'LAlightColor');
   var lightTargetLocation = gl.getUniformLocation(program, "LATarget");
   var lightDecayLocation = gl.getUniformLocation(program, "LADecay");
+  var normalMatrixLocation = gl.getUniformLocation(program, "nMatrix");
+  var vertexMatrixLocation = gl.getUniformLocation(program, "pMatrix");
+  var lightPositionHandle = gl.getUniformLocation(program, "LAPos");
 
   var perspectiveMatrix = utils.MakePerspective(90, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
   var viewMatrix = utils.MakeView(cx, cy, cz, elevation, angle);
@@ -145,6 +153,16 @@ function main() {
       gl.uniformMatrix4fv(matrixLocation, gl.FALSE, utils.transposeMatrix(projectionMatrix));
 
       //Insert here matrices and light params :)
+      gl.uniformMatrix4fv(vertexMatrixLocation, gl.FALSE, utils.transposeMatrix(cubeWorldMatrix[i]));
+
+      if (i < 3) {
+        // For uniform scaling the normal can be computed as the inverse of the world matrix
+        gl.uniformMatrix4fv(normalMatrixLocation, gl.FALSE, utils.transposeMatrix(cubeWorldMatrix[i])); 
+      } else { 
+        gl.uniformMatrix4fv(normalMatrixLocation, gl.FALSE, utils.transposeMatrix(cubeNormalMatrix));
+      }
+
+      gl.uniform3fv(lightPositionHandle, lightPos);
 
       gl.uniform3fv(materialDiffColorHandle, cubeMaterialColor);
       gl.uniform3fv(lightColorHandle,  lightColor);

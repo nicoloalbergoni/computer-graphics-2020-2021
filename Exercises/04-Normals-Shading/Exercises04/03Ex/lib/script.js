@@ -6,8 +6,11 @@ out vec3 fsNormal;
 
 //Change the shader as needed :)
 uniform mat4 matrix; 
+uniform mat4 nMatrix;
+
 
 void main() {
+  fsNormal = mat3(nMatrix) * inNormal;
   gl_Position = matrix * vec4(inPosition, 1.0);
 }`;
 
@@ -80,7 +83,9 @@ function main() {
   var matrixLocation = gl.getUniformLocation(program, "matrix");
   var materialDiffColorHandle = gl.getUniformLocation(program, 'mDiffColor');
   var lightColorHandle = gl.getUniformLocation(program, 'lightColor');
-  
+  var normalMatrixLocation = gl.getUniformLocation(program, "nMatrix");
+  var lightdirectionHandle = gl.getUniformLocation(program, "lightDirection");
+    
   var perspectiveMatrix = utils.MakePerspective(90, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
   var viewMatrix = utils.MakeView(3.0, 3.0, 2.5, -45.0, -40.0);
     
@@ -132,6 +137,11 @@ function main() {
 
       gl.uniformMatrix4fv(matrixLocation, gl.FALSE, utils.transposeMatrix(projectionMatrix));
 
+      var normalMatrix = utils.invertMatrix(utils.transposeMatrix(viewWorldMatrix));
+      gl.uniformMatrix4fv(normalMatrixLocation, gl.FALSE, utils.transposeMatrix(normalMatrix));
+      var lightDirectionTransformed = utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(viewMatrix), directionalLight);
+      gl.uniform3fv(lightdirectionHandle, lightDirectionTransformed);
+      
       gl.uniform3fv(materialDiffColorHandle, cubeMaterialColor);
       gl.uniform3fv(lightColorHandle,  directionalLightColor);
 

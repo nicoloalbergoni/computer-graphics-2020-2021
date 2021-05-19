@@ -6,9 +6,11 @@ out vec3 fsNormal;
 
 //Modify the vertex shader by adding the correct matrices here :)
 uniform mat4 matrix; 
+uniform mat4 nMatrix;
 
 void main() {
   gl_Position = matrix * vec4(inPosition, 1.0);
+  fsNormal = mat3(nMatrix) * inNormal;
 }`;
 
 var fs = `#version 300 es
@@ -34,6 +36,7 @@ function main() {
   var program = null;
 
   var cubeWorldMatrix = new Array();    //One world matrix for each cube...
+  var cubeNormalMatrix;
 
   //define directional light
   var dirLightAlpha = -utils.degToRad(60);
@@ -80,6 +83,7 @@ function main() {
   var materialDiffColorHandle = gl.getUniformLocation(program, 'mDiffColor');
   var lightDirectionHandle = gl.getUniformLocation(program, 'lightDirection');
   var lightColorHandle = gl.getUniformLocation(program, 'lightColor');
+  var normalMatrixLocation = gl.getUniformLocation(program, "nMatrix");
   
   var perspectiveMatrix = utils.MakePerspective(90, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
   var viewMatrix = utils.MakeView(3.0, 3.0, 2.5, -45.0, -40.0);
@@ -115,6 +119,7 @@ function main() {
     }
 
     cubeWorldMatrix[3] = utils.MakeWorldNonUnif( 0.0, 0.0, 0.0, cubeRx, cubeRy, cubeRz, 1.0, 2.0, 1.0);
+    cubeNormalMatrix = utils.invertMatrix(utils.transposeMatrix(cubeWorldMatrix[3]));
     lastUpdateTime = currentTime;               
   }
 
@@ -130,12 +135,19 @@ function main() {
       gl.uniformMatrix4fv(matrixLocation, gl.FALSE, utils.transposeMatrix(projectionMatrix));
       
       //Pass matrices and light params here :)
+      if (i < 3) {
+        // For uniform scaling the normal can be computed as the inverse of the world matrix
+        gl.uniformMatrix4fv(normalMatrixLocation, gl.FALSE, utils.transposeMatrix(cubeWorldMatrix[i])); 
+      } else { 
+        gl.uniformMatrix4fv(normalMatrixLocation, gl.FALSE, utils.transposeMatrix(cubeNormalMatrix));
+      }
 
       gl.uniform3fv(materialDiffColorHandle, cubeMaterialColor);
       gl.uniform3fv(lightColorHandle,  directionalLightColor);
+      gl.uniform3fv(lightDirectionHandle, directionalLight);
       
       gl.bindVertexArray(vao);
-      gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0 );
+      gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
     }
     
     window.requestAnimationFrame(drawScene);
