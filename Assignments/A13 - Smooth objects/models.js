@@ -146,8 +146,54 @@ function buildGeometry() {
 	addMesh(vert4, ind4, color4);
 
 	// Draws a Sphere --- To do for the assignment.
-	var vert5 = [[-1.0,-1.0,0.0, 0.0, 0.0,1.0], [1.0,-1.0,0.0, 0.0, 0.0,1.0], [1.0,1.0,0.0, 0.0, 0.0,1.0], [-1.0,1.0,0.0, 0.0, 0.0,1.0]];
-	var ind5 = [0, 1, 2,  0, 2, 3];
+	var vert5 = [];
+	var ind5 = [];
+
+	let Sradius = 2;	
+
+	for(let i = 0; i < 18; i++) {
+		for(let j = 0; j < 36; j++) {
+			theta = i * 10;
+			phi = j * 10;
+			let x = Sradius * Math.sin(utils.degToRad(theta)) * Math.sin(utils.degToRad(phi));
+			let y = Sradius * Math.cos(utils.degToRad(theta));
+			let z = Sradius * Math.sin(utils.degToRad(theta)) * Math.cos(utils.degToRad(phi));
+			let normal = [0,0,0];
+			vert5.push([x,y,z, ...normal]);	
+		}
+	}
+	
+	// y_center = radius * Math.cos(utils.degToRad(80));
+	// vert3.push([0,y_center,0]);
+	// console.log(vert3);
+
+	////// Creates indices
+	var ind5 = [];	
+
+
+		for(let i = 0; i < 17; i++) {
+			for(let j = 0; j < 36; j++) {
+				ind5.push((36 * i) + j);
+				ind5.push((36 * i) + j + 36);
+				ind5.push(((36 * i) + ((j + 1) % 36) + 36 ));
+
+				ind5.push(((36 * i) + ((j + 1) % 36) + 36));
+				ind5.push((36 * i) + ((j + 1) % 36));
+				ind5.push((36 * i) + j);
+
+			}		
+				
+			// Manual Indexes
+
+			// ind3.push((36 * i) + 35);
+			// ind3.push((36 * i) + 35 + 36);
+			// ind3.push(((36 * i) + 0 + 36 ));
+
+			// ind3.push(((36 * i) + 0 + 36));
+			// ind3.push((36 * i) + 0);
+			// ind3.push((36 * i) + 35);
+	}
+
 	var color5 = [1.0, 0.0, 0.0];
 	addMesh(vert5, ind5, color5);
 }
