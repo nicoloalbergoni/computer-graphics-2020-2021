@@ -94,8 +94,15 @@ function buildGeometry() {
 				let z = radius * Math.cos(utils.degToRad(theta));
 				
 				if (i < 2) { // Create vertices for flat surface
-					let y = h;				
-					let normal = normalizeV3([Math.sin(utils.degToRad(theta)), 0, Math.cos(utils.degToRad(theta))]);
+					let y = h;	
+					
+					//It is enough to normalize the cartesian expression of the coordinates
+					// let normal = normalizeV3([Math.sin(utils.degToRad(theta)), 0, Math.cos(utils.degToRad(theta))]);
+
+					let dtheta = [radius * Math.cos(utils.degToRad(theta)), 0, radius * -Math.sin(utils.degToRad(theta))];
+					let dh = [0, 1, 0];
+					let nCross = normalizeV3(crossV3(dh, dtheta));
+					let normal = [-nCross[0], -nCross[1], -nCross[2]];
 					vert4.push([x,y,z, ...normal]);
 				} else if (i == 2) { // Create vertices for upper disk
 					let y = height / 2.0;				
@@ -159,6 +166,8 @@ function buildGeometry() {
 			let y = Sradius * Math.cos(utils.degToRad(theta));
 			let z = Sradius * Math.sin(utils.degToRad(theta)) * Math.cos(utils.degToRad(phi));
 
+			//It is enough to normalize the cartesian expression of the coordinates
+			// let normal = normalizeV3([x, y, z]);
 
 			let dtheta = [Sradius * Math.cos(utils.degToRad(theta)) * Math.sin(utils.degToRad(phi)), Sradius * -Math.sin(utils.degToRad(theta)), Sradius * Math.cos(utils.degToRad(theta)) * Math.cos(utils.degToRad(phi))];
 			let dphi = [Sradius * Math.sin(utils.degToRad(theta)) * Math.cos(utils.degToRad(phi)), 0, Sradius * Math.sin(utils.degToRad(theta)) * -Math.sin(utils.degToRad(phi))];
