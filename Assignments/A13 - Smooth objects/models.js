@@ -151,14 +151,25 @@ function buildGeometry() {
 
 	let Sradius = 2;	
 
-	for(let i = 0; i < 18; i++) {
+	for(let i = 0; i < 19; i++) {
 		for(let j = 0; j < 36; j++) {
 			theta = i * 10;
 			phi = j * 10;
 			let x = Sradius * Math.sin(utils.degToRad(theta)) * Math.sin(utils.degToRad(phi));
 			let y = Sradius * Math.cos(utils.degToRad(theta));
 			let z = Sradius * Math.sin(utils.degToRad(theta)) * Math.cos(utils.degToRad(phi));
-			let normal = [0,0,0];
+
+
+			let dtheta = [Sradius * Math.cos(utils.degToRad(theta)) * Math.sin(utils.degToRad(phi)), Sradius * -Math.sin(utils.degToRad(theta)), Sradius * Math.cos(utils.degToRad(theta)) * Math.cos(utils.degToRad(phi))];
+			let dphi = [Sradius * Math.sin(utils.degToRad(theta)) * Math.cos(utils.degToRad(phi)), 0, Sradius * Math.sin(utils.degToRad(theta)) * -Math.sin(utils.degToRad(phi))];
+			let nCross = normalizeV3(crossV3(dphi, dtheta));
+			let normal = [-nCross[0], -nCross[1], -nCross[2]];
+
+			// Set normal for north pole
+			if (theta == 0) {
+				normal = [0, 1, 0];
+			}
+
 			vert5.push([x,y,z, ...normal]);	
 		}
 	}
@@ -171,7 +182,7 @@ function buildGeometry() {
 	var ind5 = [];	
 
 
-		for(let i = 0; i < 17; i++) {
+		for(let i = 0; i < 18; i++) {
 			for(let j = 0; j < 36; j++) {
 				ind5.push((36 * i) + j);
 				ind5.push((36 * i) + j + 36);
