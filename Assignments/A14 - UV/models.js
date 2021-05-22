@@ -72,30 +72,52 @@ function buildGeometry() {
 			
 			if (i < 2) { // Create vertices for flat surface
 				let y = h;	
-				let step = (j % 36) * (0.5/36.0);
-				let uv = [0.5 + step, y > 0 ? 0.75 : 0.5];
+				let step = (j * (0.5/36.0)) + (0.5/36.0); // Step for the U coordinate, it starts from 0.5 + 0.5/36 (as there is a small white line in 0.5) and goes up to 1
+				let uv = [0.5 + step, y > 0 ? 0.75 : 0.5]; // The V coordinate is 0.75 for the upper part of the cylinder and 0.5 for the bottom part
 								
-				//It is enough to normalize the cartesian expression of the coordinates
+				// It is enough to normalize the cartesian expression of the coordinates
 				// let normal = normalizeV3([Math.sin(utils.degToRad(theta)), 0, Math.cos(utils.degToRad(theta))]);
 
 				let dtheta = [radius * Math.cos(utils.degToRad(theta)), 0, radius * -Math.sin(utils.degToRad(theta))];
 				let dh = [0, 1, 0];
 				let nCross = normalizeV3(crossV3(dh, dtheta));
-				let normal = [-nCross[0], -nCross[1], -nCross[2]];				
-
+				let normal = [-nCross[0], -nCross[1], -nCross[2]];						
+				
 				vert3.push([x,y,z, ...normal, ...uv]);
+
+				// Normally the last vertex should connect with the first one to create a triangle that close the circle. In our case we have to connect to the a vertex that have the same position
+				// as the first one (theta = 0) but different UV coordinates, hence we need to create an additional vertex				 
+				if (j == 35) {
+					theta = 0;
+					x = radius * Math.sin(utils.degToRad(theta));
+					z = radius * Math.cos(utils.degToRad(theta));
+					y = h;						
+					let uv = [1, y > 0 ? 0.75 : 0.5];								
+
+					dtheta = [radius * Math.cos(utils.degToRad(theta)), 0, radius * -Math.sin(utils.degToRad(theta))];
+					dh = [0, 1, 0];
+					nCross = normalizeV3(crossV3(dh, dtheta));
+					normal = [-nCross[0], -nCross[1], -nCross[2]];
+					
+					vert3.push([x,y,z, ...normal, ...uv]);
+				}				
+
 			} else if (i == 2) { // Create vertices for upper disk
+
 				let y = height / 2.0;				
 				let normal = [0, 1, 0];
 				let u = 0.625 + (0.125 * Math.cos(utils.degToRad(theta)));
 				let v = 0.875 + (0.125 * Math.sin(utils.degToRad(theta)));				
 				vert3.push([x,y,z, ...normal, u, v]);
+
 			} else { // Create vertices for bottom disk
+
 				let y = - (height / 2.0);				
 				let normal = [0, -1, 0];
 				let u = 0.875 + (0.125 * Math.cos(utils.degToRad(theta)));
 				let v = 0.875 + (0.125 * Math.sin(utils.degToRad(theta)));		
 				vert3.push([x,y,z, ...normal, u, v]);
+
 			}
 		}			
 	}
@@ -109,28 +131,32 @@ function buildGeometry() {
 	let bottom_center_pos = vert3.push(bottom_center) - 1;
 
 	// Assign indexes for the surface of the cylinder
-	for (let j = 0; j < 36; j++) {
+	// Here we iterate 2 more times as we have to index the two additional vertex added before
+	for (let j = 0; j < 37; j++) {
 		ind3.push(j);
 		ind3.push(j + 36);
-		ind3.push(((j + 1) % 36) + 36);
+		ind3.push((j + 1) + 36);
 
-		ind3.push(((j + 1) % 36) + 36);
-		ind3.push((j + 1) % 36);
+		ind3.push((j + 1) + 36);
+		ind3.push((j + 1));
 		ind3.push(j);
 	}			
+
+	// This variable accounts for the shift in the vertices of the up and bottom disk due to the 2 additional vertices added before
+	let shift = 2;
 
 	// Assign indexes for the upper disk
 	for (let i = 0; i < 36; i++) {
 		ind3.push(up_center_pos);
-		ind3.push((36 * 2) + i);
-		ind3.push((36 * 2) + ((i + 1) % 36));			
+		ind3.push((36 * 2) + i + shift);
+		ind3.push((36 * 2) + ((i + 1) % 36) + shift);			
 	}
 	
 	// Assign indexes for the bottom disk (different order for back-face culling)
 	for (let i = 0; i < 36; i++) {
 		ind3.push(bottom_center_pos);
-		ind3.push((36 * 3) + ((i + 1) % 36));					
-		ind3.push((36 * 3) + i);
+		ind3.push((36 * 3) + ((i + 1) % 36) + shift);					
+		ind3.push((36 * 3) + i + shift);
 	}
 
 	var color3 = [0.0, 1.0, 1.0];
