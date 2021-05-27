@@ -24,7 +24,24 @@ function Anim2(t) {
 
 function Anim3(t) {
 	// rotating fan
-	var out = utils.identityMatrix();
+
+	let scale = utils.MakeScaleNuMatrix(0.25, 0.25, 1);
+	let translation = utils.MakeTranslateMatrix(0.5, 0.75, 0);
+	let temp = utils.multiplyMatrices(translation, scale);
+
+	let axisToOrigin = utils.invertMatrix(utils.MakeTranslateMatrix(0.625, 0.875, 0));
+	let alignX = utils.invertMatrix(utils.MakeRotateYMatrix(90));
+	let rotation = utils.MakeRotateXMatrix(t * 360.0);
+	let alignBackX = utils.MakeRotateYMatrix(90);
+	let axisBack = utils.MakeTranslateMatrix(0.625, 0.875, 0);
+
+	let A = utils.multiplyMatrices(alignX, axisToOrigin);
+	let B = utils.multiplyMatrices(rotation, A);
+	let C = utils.multiplyMatrices(alignBackX, B);
+	let D = utils.multiplyMatrices(axisBack, C);
+
+	let out = utils.multiplyMatrices(D, temp);
+	
 	return out;
 }
 
