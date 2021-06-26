@@ -47,7 +47,13 @@ function Anim3(t) {
 
 function Anim4(t) {
 	// buring flame
-	var out = utils.identityMatrix();
+
+	let scale = utils.MakeScaleNuMatrix(0.0625, 0.0625, 1);
+	let translation = utils.MakeTranslateMatrix(0, 0, 0);
+	let temp = utils.multiplyMatrices(translation, scale);
+
+	let out = utils.multiplyMatrices(temp, utils.MakeTranslateMatrix(t, 0, 0));
+	
 	return out;
 }
 
