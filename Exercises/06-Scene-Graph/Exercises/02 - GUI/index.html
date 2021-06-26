@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+	<head>
+	<meta charset='utf-8'>
+	<title>GUI examples</title>
+    <script type="text/javascript" src="GuiExample.js"></script>
+	</head>
+	<body style="background-color: grey;">
+		<table>
+		<tr>
+			<td>
+			<canvas id="my-canvas" width="800" height="600" style="background-color: red;">
+			Your browser does not support the HTML5 canvas element.
+			</canvas>
+			 <div id="legend" style="position: absolute; z-index: 1; left: 40px; top: 400px; width:300px; height:165px; background-color: white; border-style: dashed; border-color: blue; opacity: 0.7; padding: 5px 10px 5px 10px; overflow:auto">
+				<p style="font-family: Courier New">
+					<b>GUI above canvas</b>			
+					<ul style="font-family: Courier New">
+						<li>Position:absolute</li> 
+						<li>z-index:1</li> 
+					</ul>
+				</p>
+			</div>			
+			</td> 
+			<td style="background-color: white; font-family: courier; padding: 5px;">
+			<p><h2> GUI examples </h2></p>
+			<p><b> Radio buttons </b></p>
+			<form>
+				<input type="radio" name="light" id="yesl" onchange="onRadioButtonChange(this.value);" value="1" checked> Option 1 <br/>
+				<input type="radio" name="light" onchange="onRadioButtonChange(this.value);" value="2" > Option 2 <br/>
+				<input type="radio" name="light" onchange="onRadioButtonChange(this.value);" value="3" > Option 3 <br/>
+			</form>		
+			<p><b> Slider </b></p>
+			<div id="slider1"> 0 
+				<input id="slide1" type="range" min="0" max="1" step="0.1" value="0" onchange="onSliderChange(this.value);"/> 1 <br/>	
+			</div>
+			
+			<p><b> Checkbox </b></p>
+				<input type="checkbox" id="chbx" onclick="onCheckBoxChange(this.checked);"/> Move Lights<br/>
+            <p><b> Drop-down list</b></p>
+            <select id="drop-down" name="" onchange="onDropdownChange(this.value);">
+                <option value="1" selected>Option 1</option>
+                <option value="2">Option 2</option>
+                <option value="3">Option 3</option>
+            </select>
+			</td>
+        </tr>
+		</table>
+	</body>
+</html>
