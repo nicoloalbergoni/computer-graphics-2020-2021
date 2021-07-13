@@ -5,7 +5,7 @@ function Anim1(t) {
 	let translation = utils.MakeTranslateMatrix(0, 0.5, 0);
 	let temp = utils.multiplyMatrices(translation, scale);
 	
-	var out = utils.multiplyMatrices(temp, utils.MakeTranslateMatrix(t,0,0));
+	var out = utils.multiplyMatrices(temp, utils.MakeTranslateMatrix(t, 0, 0));
 	return out;
 }
 
@@ -47,12 +47,18 @@ function Anim3(t) {
 
 function Anim4(t) {
 	// buring flame
+	let cellDimension = 0.25 / 3;
 
-	let scale = utils.MakeScaleNuMatrix(0.0625, 0.0625, 1);
-	let translation = utils.MakeTranslateMatrix(0, 0, 0);
-	let temp = utils.multiplyMatrices(translation, scale);
+	let scale = utils.MakeScaleNuMatrix(cellDimension, cellDimension, 1);
 
-	let out = utils.multiplyMatrices(temp, utils.MakeTranslateMatrix(t, 0, 0));
+	let currentCell = t * 72;
+	let rowPosition = Math.trunc(currentCell / 12);
+	let colPosition = Math.trunc(currentCell - (rowPosition * 12));
+
+	let u_coord = cellDimension * colPosition;
+	let v_coord = (0.5 - cellDimension) - (cellDimension * rowPosition);
+
+	let out = utils.multiplyMatrices(utils.MakeTranslateMatrix(u_coord, v_coord, 0), scale);
 	
 	return out;
 }
