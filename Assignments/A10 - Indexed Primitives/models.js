@@ -1,7 +1,6 @@
 function buildGeometry() {
 	var i;
 	
-
 	// Draws function y = sin(x) * cos(z) with -3 <= x <= 3 and -3 <= z <= 3.
 	///// Creates vertices
 	var vert2 = [];
@@ -33,9 +32,11 @@ function buildGeometry() {
 
 
 	// Draws a Half Sphere
-	///// Creates vertices
+
+	// Creates vertices
 	var vert3 = [];
 	var radius = 2;	
+
 	for(let i = 0; i < 10; i++) {
 		for(let j = 0; j < 36; j++) {
 			theta = i * 10;
@@ -47,15 +48,11 @@ function buildGeometry() {
 		}
 	}
 	
-	y_center = radius * Math.cos(utils.degToRad(80));
-	vert3.push([0,y_center,0]);
-	console.log(vert3);
+	let y_center = radius * Math.cos(utils.degToRad(80));
+	let centerIndex = vert3.push([0,y_center,0]) - 1;
 
-
-	////// Creates indices
+	// Creates indices
 	var ind3 = [];	
-
-
 		for(let i = 0; i < 8; i++) {
 			for(let j = 0; j < 36; j++) {
 				ind3.push((36 * i) + j);
@@ -67,27 +64,15 @@ function buildGeometry() {
 				ind3.push((36 * i) + j);
 
 			}		
-				
-			// Manual Indexes
-
-			// ind3.push((36 * i) + 35);
-			// ind3.push((36 * i) + 35 + 36);
-			// ind3.push(((36 * i) + 0 + 36 ));
-
-			// ind3.push(((36 * i) + 0 + 36));
-			// ind3.push((36 * i) + 0);
-			// ind3.push((36 * i) + 35);
 	}
 
 	// Bottom disk
 
 	for (let j = 0; j < 36; j++) {
-		ind3.push(324);
+		ind3.push(centerIndex);
 		ind3.push(((36 * 7) + ((j + 1) % 36) + 36 ));
 		ind3.push((36 * 7) + j + 36);		
 	}
-
-
 
 	var color3 = [0.0, 1.0, 0.0];
 	addMesh(vert3, ind3, color3);
