@@ -9,7 +9,7 @@ function normalizeV3(v) {
 
 function buildGeometry() {
 	var i,j;
-	// Draws a pyramid --- To complete for the assignment. This is just the one in Assignment 13, where two 0.1, 0.1 UV components have been added to the vertices definitions. Such number must be replaced (differently for each vertexes), to obtain a proper Egyptian Pyramid
+	// Draws a pyramid 
 
 									// Back Face
 		var vert1 = [[0.0,1.0,0.0, 0.0, 0.4472,-0.8944, 0.625, 0.5],[ 1.0,-1.0,-1.0, 0.0, 0.4472,-0.8944, 0.5, 0.25],[-1.0,-1.0,-1.0, 0.0, 0.4472,-0.8944, 0.75, 0.25],
@@ -27,7 +27,7 @@ function buildGeometry() {
 	
 	addMesh(vert1, ind1, color1);
 	
-	// Draws a cube -- To do for the assignment.
+	// Draws a cube
 
 	var vert2 = [
 		// Front Face
@@ -56,7 +56,7 @@ function buildGeometry() {
 	addMesh(vert2, ind2, color2);
 	
 	
-	// Draws a Cylinder --- To do for the assignment
+	// Draws a Cylinder
 	var vert3 = [];
 	var ind3 = [];
 

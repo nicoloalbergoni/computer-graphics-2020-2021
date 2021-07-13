@@ -34,7 +34,6 @@ function shaders() {
 //
 // vec4 ambientColor;
 
-// TODO: Finished
 // Single directional light, constant ambient
 var S1 = `
 	OlightDir = Dir;
@@ -43,14 +42,12 @@ var S1 = `
 	ambientColor = ambientLightColor;
 `;
 
-// TODO: Finished
 // Single point light without decay
 var S2 = `
 	OlightDir = normalize(Pos - fs_pos);
 	OlightColor = lightColor;
 `;
 
-// TODO: Finished
 // Single spot light (without decay), constant ambient
 var S3 = `
 	vec3 light_dir_n = normalize(Pos - fs_pos);
@@ -64,7 +61,6 @@ var S3 = `
 	ambientColor = ambientLightColor;
 `;
 
-// TODO: Finished
 // Single point light with decay
 var S4 = `
 	vec3 light_dir_n = normalize(Pos - fs_pos);
@@ -75,7 +71,6 @@ var S4 = `
 	OlightDir = light_dir_n;
 `;
 
-// TODO: Finished
 // Single spot light (with decay)
 var S5 = `
 	vec3 light_dir_n = normalize(Pos - fs_pos);
@@ -91,7 +86,6 @@ var S5 = `
 
 `;
 
-//TODO: See if decay is missing and if we need to add constant term ambient light
 // Single point light, hemispheric ambient 
 var S6 = `
   vec3 light_dir_n = normalize(Pos - fs_pos);
@@ -104,7 +98,6 @@ var S6 = `
   ambientColor = hem_ambient;
 `;
 
-//TODO: See if decay is missing
 // Single spot light, spherical harmonics ambient
 var S7 = `
   vec3 light_dir_n = normalize(Pos - fs_pos);

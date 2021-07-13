@@ -9,11 +9,11 @@ function draw() {
 	//Round Part
 	for (let i = 0; i <= 64; i++) {
 
-			x1 = 0.3 * (1 + Math.sin(Math.PI * i/64));
-			y1 =  0.3 * (Math.cos(Math.PI * i/64));
+			let x1 = 0.3 * (1 + Math.sin(Math.PI * i/64));
+			let y1 =  0.3 * (Math.cos(Math.PI * i/64));
 
-			x2 = 0.3 * (1 + Math.sin(Math.PI * (i + 1)/64));
-			y2 =  0.3 * (Math.cos(Math.PI * (i + 1)/64));
+			let x2 = 0.3 * (1 + Math.sin(Math.PI * (i + 1)/64));
+			let y2 =  0.3 * (Math.cos(Math.PI * (i + 1)/64));
 
 			line(x1, y1, x2, y2);
 	}

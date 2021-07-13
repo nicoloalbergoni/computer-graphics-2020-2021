@@ -31,7 +31,6 @@ function shaders() {
 //
 // vec4 ambientLight;
 
-//TODO: Finished
 // Lambert diffuse and Ambient material. No specular or emisssion.
 var S1 = `
 	vec4 LAcontr = clamp(dot(lightDirA, normalVec),0.0,1.0) * lightColorA;
@@ -40,7 +39,6 @@ var S1 = `
 	out_color = clamp(diffColor * (LAcontr + LBcontr + LCcontr) + ambientLight * ambColor, 0.0, 1.0);
 `;
 
-//TODO: Finished
 // Lambert diffuse and Blinn specular. No ambient and emission.
 var S2 = `
 	vec4 LA_diffuse = clamp(dot(lightDirA, normalVec),0.0,1.0) * lightColorA;
@@ -62,7 +60,6 @@ var S2 = `
 	out_color = clamp(diffuse + specular, 0.0, 1.0);
 `;
 
-//TODO: Finished
 // Ambient and Phong specular. No emssion and no diffuse.
 var S3 = `
 	vec3 reflect_LA = -reflect(lightDirA, normalVec);
@@ -79,7 +76,6 @@ var S3 = `
 	out_color = clamp(specular + ambient, 0.0, 1.0);
 `;
 
-//TODO: Lambert Diffuse ?
 // Diffuse, ambient, emission and Phong specular.
 var S4 = `
 	vec4 LA_diffuse = clamp(dot(lightDirA, normalVec),0.0,1.0) * lightColorA;
@@ -103,7 +99,6 @@ var S4 = `
 	out_color = clamp(diffuse + specular + ambient + emit, 0.0, 1.0);
 `;
 
-//TODO: Are the formula correct ? Do i need to clamp the value for the thresholds ?
 // Ambient, Toon diffuse and and Toon (Blinn based) specular. No emssion.
 var S5 = `
 

@@ -19,7 +19,7 @@ function buildGeometry() {
 	var color1 = [0.0, 0.0, 1.0];
 	addMesh(vert1, ind1, color1);
 	
-	// Draws a cube -- To do for the assignment.
+	// Draws a cube 
 	var vert2 = [
 		// Front Face
 		[-1.0, -1.0, 1.0, 0.0, 0.0, 1.0], [1.0, -1.0, 1.0, 0.0, 0.0, 1.0], [1.0, 1.0, 1.0, 0.0, 0.0, 1.0], [-1.0, 1.0, 1.0, 0.0, 0.0, 1.0],
@@ -45,7 +45,7 @@ function buildGeometry() {
 	var color2 = [0.0, 1.0, 1.0];
 	addMesh(vert2, ind2, color2);
 	
-	// Draws function y = sin(x) * cos(z) with -3 <= x <= 3 and -3 <= z <= 3 -- To do for the assignment.
+	// Draws function y = sin(x) * cos(z) with -3 <= x <= 3 and -3 <= z <= 3
 
 	var vert3 = [];
 	for(let i = 0; i < 7; i++) {
@@ -61,7 +61,8 @@ function buildGeometry() {
 			vert3[(7*i) + j] = [x, y, z, -normal[0], -normal[1], -normal[2]];
 		}
 	}
-	////// Creates indices
+
+	// Creates indices
 	var ind3 = [];
 	
 	for (let i = 0; i < 6; i++) {
@@ -79,7 +80,7 @@ function buildGeometry() {
 	var color3 = [0.0, 1.0, 1.0];
 	addMesh(vert3, ind3, color3);
 	
-	// Draws a Cylinder --- To do for the assignment
+	// Draws a Cylinder
 		var vert4 = [];
 		var ind4 = [];
 
@@ -103,15 +104,20 @@ function buildGeometry() {
 					let dh = [0, 1, 0];
 					let nCross = normalizeV3(crossV3(dh, dtheta));
 					let normal = [-nCross[0], -nCross[1], -nCross[2]];
+
 					vert4.push([x,y,z, ...normal]);
+
 				} else if (i == 2) { // Create vertices for upper disk
 					let y = height / 2.0;				
 					let normal = [0, 1, 0];
 					vert4.push([x,y,z, ...normal]);
+
 				} else { // Create vertices for bottom disk
+
 					let y = - (height / 2.0);				
 					let normal = [0, -1, 0];
 					vert4.push([x,y,z, ...normal]);
+
 				}
 			}			
 		}
@@ -152,7 +158,7 @@ function buildGeometry() {
 	var color4 = [1.0, 1.0, 0.0];
 	addMesh(vert4, ind4, color4);
 
-	// Draws a Sphere --- To do for the assignment.
+	// Draws a Sphere
 	var vert5 = [];
 	var ind5 = [];
 
@@ -183,11 +189,7 @@ function buildGeometry() {
 		}
 	}
 	
-	// y_center = radius * Math.cos(utils.degToRad(80));
-	// vert3.push([0,y_center,0]);
-	// console.log(vert3);
-
-	////// Creates indices
+	// Creates indices
 	var ind5 = [];	
 
 
@@ -202,16 +204,6 @@ function buildGeometry() {
 				ind5.push((36 * i) + j);
 
 			}		
-				
-			// Manual Indexes
-
-			// ind3.push((36 * i) + 35);
-			// ind3.push((36 * i) + 35 + 36);
-			// ind3.push(((36 * i) + 0 + 36 ));
-
-			// ind3.push(((36 * i) + 0 + 36));
-			// ind3.push((36 * i) + 0);
-			// ind3.push((36 * i) + 35);
 	}
 
 	var color5 = [1.0, 0.0, 0.0];
